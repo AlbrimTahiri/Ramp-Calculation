@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body {
+    font-size: 20px;
+    text-transform: uppercase;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+input {
+    margin: 10px 0;
+    padding: 10px;
+}
+</style>
+</head>
+<body>
+
+<h2>Ramp Calculator</h2>
+
+<form>
+  <label for="percentage">Ramp Percentage:</label>
+  <input type="text" id="percentage" name="percentage">
+  <br>
+  <label for="ratio">Ramp Ratio:</label>
+  <input type="text" id="ratio" name="ratio">
+  <br>
+  <label for="angle">Ramp Angle:</label>
+  <input type="text" id="angle" name="angle">
+  <br><br>
+  <button type="button" onclick="calculate()">Calculate</button>
+</form> 
+<br>
+<div id="output"></div>
+
+<script>
+function calculate() {
+    var rampPercentage = document.getElementById("percentage").value;
+    var rampRatio = document.getElementById("ratio").value;
+    var rampAngle = document.getElementById("angle").value;
+    var percentage, ratio, angle;
+
+    if (rampPercentage) {
+        percentage = parseFloat(rampPercentage);
+        var rise = 1;
+        var run = (1/percentage)*100;
+        ratio = "1:" + run;
+        angle = Math.atan(rise/run) * (180/Math.PI);
+    }
+    else if (rampRatio) {
+        var ratioArr = rampRatio.split(':');
+        var rise = 1;
+        var run = parseFloat(ratioArr[1]);
+        if(!isFinite(run) || run == 0){
+            alert("Invalid ramp ratio, the ratio should be in the format of x:y where x and y are numbers, and y should be greater than 0");
+        }else{
+            percentage = (rise/run)*100;
+            ratio = "1:" + run;
+            angle = Math.atan(rise/run) * (180/Math.PI);
+        }
+    }
+
+    else if (rampAngle) {
+        angle = parseFloat(rampAngle);
+        var rise = Math.tan(angle * (Math.PI / 180));
+        var run = 1;
+        ratio = rise + ":" + run;
+        percentage = (rise/run)*100;
+    }
+    else {
+        alert("Please enter a value for at least one of the inputs");
+    }
+    document.getElementById("output").innerHTML = "Ramp Percentage: " + percentage.toFixed(2) + "%" + "<br>" + "Ramp Ratio: " + ratio + "<br>" + "Ramp Angle: " + angle.toFixed(2) + " degrees";
+}
+</script>
+
+</body>
+</html>
